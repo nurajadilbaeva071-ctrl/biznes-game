@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Бизнестегі ресурстар — Сәйкестендіру ойыны</title>
+<style>
+:root{color-scheme:dark;--bg1:#070b2b;--bg2:#2b1159;--cy:#22d3ee;--em:#10b981;--gold:#f5c451;--ink:#101a3d;--red:#f87171;
+--font:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);color:#fff;background:linear-gradient(150deg,var(--bg1) 0%,#14185a 50%,var(--bg2) 100%);position:relative}
+/* background geometry */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.glow{position:absolute;border-radius:50%;filter:blur(90px)}
+.g1{width:46vmax;height:46vmax;background:rgba(34,211,238,.22);top:-18vmax;right:-12vmax}
+.g2{width:42vmax;height:42vmax;background:rgba(139,92,246,.3);bottom:-20vmax;left:-14vmax}
+.shape{position:absolute;border:1.5px solid rgba(255,255,255,.12)}
+.s1{width:34vmin;height:34vmin;border-radius:50%;top:8%;left:-8vmin}
+.s2{width:22vmin;height:22vmin;transform:rotate(45deg);bottom:12%;right:6%;border-color:rgba(245,196,81,.25)}
+.s3{width:12vmin;height:12vmin;transform:rotate(20deg);top:22%;right:14%;border-radius:20%}
+.app{position:relative;z-index:1;height:100%;height:100dvh;display:flex;flex-direction:column;padding:max(10px,env(safe-area-inset-top)) 14px max(10px,env(safe-area-inset-bottom));max-width:1100px;margin:0 auto}
+.screen{display:none;flex:1;min-height:0;flex-direction:column}
+.screen.on{display:flex;animation:in .6s ease both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+/* start */
+#start{align-items:center;justify-content:center;text-align:center;gap:clamp(10px,2.5vh,22px)}
+.badge{width:84px;height:84px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(255,255,255,.2),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(14px);box-shadow:0 20px 50px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.4)}
+.badge svg{width:42px;height:42px;stroke:var(--gold)}
+h1{font-size:clamp(28px,6.4vw,64px);font-weight:800;letter-spacing:.02em;line-height:1.08;background:linear-gradient(95deg,#fff 20%,#a5f3fc 60%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:clamp(17px,3vw,26px);font-weight:600;color:#c7d2fe}
+.lead{max-width:540px;font-size:clamp(15px,2.2vw,19px);line-height:1.55;color:#e0e7ff;padding:14px 22px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px)}
+.btn{font:inherit;font-weight:800;font-size:clamp(16px,2.6vw,20px);letter-spacing:.04em;cursor:pointer;border:0;color:#2a1c00;padding:16px 42px;border-radius:16px;background:linear-gradient(180deg,#ffe29a,var(--gold));box-shadow:0 6px 0 #a87a14,0 14px 30px rgba(245,196,81,.3);transition:transform .15s,box-shadow .15s,filter .2s}
+.btn:hover{transform:translateY(-3px);filter:brightness(1.06)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 #a87a14,0 6px 12px rgba(245,196,81,.25)}
+/* header */
+.hd{flex:none;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(14px)}
+.brand{flex:1;min-width:0;line-height:1.15}
+.brand b{display:block;font-size:clamp(11px,1.8vw,14px);letter-spacing:.1em;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand span{font-size:clamp(13px,2.2vw,17px);font-weight:600;color:#e0e7ff}
+.chip{flex:none;padding:7px 12px;border-radius:12px;background:rgba(0,0,0,.25);font-size:clamp(12px,2vw,15px);font-weight:600;color:#c7d2fe;white-space:nowrap}
+.chip b{color:#fff;font-size:1.15em}
+.ib{flex:none;width:36px;height:36px;border-radius:11px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:grid;place-items:center;transition:background .2s,transform .15s}
+.ib:hover{background:rgba(255,255,255,.18)}.ib:active{transform:scale(.88)}
+.ib svg{width:18px;height:18px}
+.bar{flex:none;height:6px;margin:8px 4px 0;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--cy),var(--em),var(--gold));transition:width .8s cubic-bezier(.3,1,.4,1);box-shadow:0 0 12px var(--cy)}
+.msg{flex:none;height:clamp(28px,5vh,40px);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(14px,2.3vw,19px);color:#a5b4fc;transition:color .2s}
+.msg.ok{color:#6ee7b7}.msg.no{color:var(--red)}
+/* board */
+.board{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,3vw,40px);transition:opacity .45s,transform .45s}
+.board.out{opacity:0;transform:scale(.96) translateY(10px)}
+.board.fresh{animation:in .6s ease both}
+.col{display:grid;grid-template-rows:repeat(var(--n),minmax(0,1fr));gap:clamp(10px,2.4vh,22px);min-height:0}
+.board.one{align-content:center}
+.board.one .col{max-height:min(100%,230px);align-self:center}
+.card{position:relative;min-height:0;display:flex;align-items:center;gap:clamp(8px,1.6vw,16px);padding:clamp(8px,1.8vh,18px) clamp(10px,2vw,22px);border-radius:20px;color:var(--ink);font-weight:600;font-size:clamp(13px,min(2.3vw,2.7vh),21px);line-height:1.35;cursor:pointer;user-select:none;overflow:hidden;overflow-wrap:anywhere;
+background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(224,242,254,.88));border:1.5px solid rgba(255,255,255,.7);backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(3,6,30,.35),inset 0 1px 0 #fff;transition:transform .25s cubic-bezier(.3,1.4,.5,1),box-shadow .25s,border-color .25s,background .35s}
+.card.a{justify-content:center;text-align:center;font-weight:800;background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(237,233,254,.9))}
+.card:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 16px 36px rgba(3,6,30,.45),0 0 0 2px rgba(34,211,238,.5)}
+.card .ic{flex:none;width:clamp(30px,5vh,46px);aspect-ratio:1;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#0e7490,#6d28d9);box-shadow:0 6px 14px rgba(14,116,144,.4)}
+.card .ic svg{width:58%;height:58%;stroke:#fff}
+.card.sel{border-color:var(--cy);transform:translateY(-4px) scale(1.02);box-shadow:0 0 0 3px rgba(34,211,238,.35),0 0 34px rgba(34,211,238,.55),0 16px 36px rgba(3,6,30,.45)}
+.card.ok{pointer-events:none;color:#052e21;border-color:#6ee7b7;background:linear-gradient(160deg,#d1fae5,#6ee7b7);box-shadow:0 0 28px rgba(16,185,129,.55);animation:good .55s}
+.card.ok .ic{background:linear-gradient(145deg,#059669,#10b981)}
+.card.ok::after{content:"";position:absolute;right:10px;top:10px;width:18px;height:18px;border-radius:50%;background:var(--em) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/70% no-repeat}
+.card.no{border-color:var(--red);animation:shake .45s}
+@keyframes good{45%{transform:scale(1.06)}}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+/* win */
+.modal{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:16px;background:rgba(4,6,28,.72);backdrop-filter:blur(8px)}
+.modal.on{display:grid}
+.win{width:min(480px,100%);text-align:center;padding:34px 24px 28px;border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.3);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(34,211,238,.25),inset 0 1px 0 rgba(255,255,255,.4);backdrop-filter:blur(20px);animation:pop .7s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.win .badge{margin:0 auto 14px}
+.win h2{font-size:clamp(20px,5vw,28px);font-weight:800;line-height:1.25;margin-bottom:18px;color:var(--gold)}
+.res{display:flex;gap:12px;justify-content:center;margin-bottom:22px}
+.res div{flex:1;padding:12px 8px;border-radius:16px;background:rgba(0,0,0,.25);color:#c7d2fe;font-size:14px;font-weight:600}
+.res b{display:block;font-size:30px;color:#6ee7b7}
+canvas{position:fixed;inset:0;z-index:30;pointer-events:none;width:100%;height:100%}
+@media (max-width:560px){.chip.st span{display:none}.hd{gap:6px;padding-left:10px}.card{border-radius:16px}.card.ok::after{width:14px;height:14px;right:6px;top:6px}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="glow g1"></div><div class="glow g2"></div><div class="shape s1"></div><div class="shape s2"></div><div class="shape s3"></div></div>
+<canvas id="cf"></canvas>
+
+<div class="app">
+  <section class="screen on" id="start">
+    <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg></div>
+    <h1>БИЗНЕСТЕГІ РЕСУРСТАР</h1>
+    <div class="sub">Сәйкестендіру ойыны</div>
+    <p class="lead">Сол жақтағы ұғымдарды оң жақтағы дұрыс жауаптармен сәйкестендір!</p>
+    <button class="btn" id="go">ОЙЫНДЫ БАСТАУ</button>
+  </section>
+
+  <section class="screen" id="game">
+    <div class="hd">
+      <div class="brand"><b>БИЗНЕСТЕГІ РЕСУРСТАР</b><span>Сәйкестендіру ойыны</span></div>
+      <div class="chip st"><span>Кезең </span><b id="stg">1</b> / 4</div>
+      <div class="chip">Ұпай <b id="sc">0</b></div>
+      <button class="ib" id="snd" title="Дыбыс" aria-label="Дыбыс"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="sndi"><path d="M11 5L6 9H3v6h3l5 4zM22 9l-6 6M16 9l6 6"/></svg></button>
+      <button class="ib" id="fs" title="Толық экран" aria-label="Толық экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    </div>
+    <div class="bar"><i id="fl"></i></div>
+    <div class="msg" id="ms">Сол жақтан ұғымды таңда</div>
+    <div class="board" id="bd"><div class="col" id="L"></div><div class="col" id="R"></div></div>
+  </section>
+</div>
+
+<div class="modal" id="wm"><div class="win">
+  <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="#f5c451" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" width="42" height="42"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a3 3 0 0 0 4 3M16 6h4v1a3 3 0 0 1-4 3M12 13v4M8 20h8M10 17h4"/></svg></div>
+  <h2>ЖАРАЙСЫҢ! БАРЛЫҚ ТАПСЫРМА ОРЫНДАЛДЫ!</h2>
+  <div class="res"><div><b id="ws">0</b>ұпай</div><div><b id="wc">0</b>дұрыс жауап</div></div>
+  <button class="btn" id="again">ҚАЙТА ОЙНАУ</button>
+</div></div>
+
+<script>
+const ICONS=[
+'<path d="M4 21V5l8-2v18M12 9h8v12M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/>',
+'<circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.400-1.500-2.500-1.500-1.500 0-2.500.8-2.500 2s1 1.700 2.500 2 2.500.8 2.500 2-1 2-2.500 2c-1.100 0-2-.5-2.500-1.500M12 6v2M12 16v2"/>',
+'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.300 2.700-6 6-6s6 2.700 6 6M16 5.500a3 3 0 0 1 0 5.500M18 14.500c1.800.8 3 2.600 3 5.500"/>',
+'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+'<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',
+'<path d="M12 3l8 4.500v9L12 21l-8-4.500v-9zM12 12l8-4.500M12 12v9M12 12L4 7.500"/>',
+'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.400 3.600-7 8-7s8 2.600 8 7M12 14v3"/>',
+'<path d="M20 12a8 8 0 0 1-14 5M4 12a8 8 0 0 1 14-5M18 3v4h-4M6 21v-4h4"/>',
+'<path d="M12 4v16M6 20h12M5 8h14M5 8l-3 7a3 3 0 0 0 6 0zM19 8l-3 7a3 3 0 0 0 6 0z"/>'];
+const DATA=[
+["Ғимараттар, техника және құрал-жабдықтар","Материалдық ресурстар"],
+["Бизнесті жүргізуге қажетті ақша қаражаты","Қаржылық ресурстар"],
+["Кәсіпорында жұмыс істейтін адамдардың білімі мен еңбегі","Еңбек ресурстары"],
+["Нарық пен тұтынушылар туралы мәліметтер","Ақпараттық ресурстар"],
+["Жұмысты жоспарлауға және тапсырмаларды орындауға бөлінетін мүмкіндік","Уақыт ресурсы"],
+["Бизнесті дамыту үшін салынатын қаражат","Инвестиция"],
+["Өнім өндіруге пайдаланылатын бастапқы материал","Шикізат"],
+["Бизнесті ұйымдастырып, оның дамуына жауап беретін адам","Кәсіпкер"],
+["Шығындарды азайтып, қолда бар мүмкіндіктерді дұрыс қолдану","Ресурстарды тиімді пайдалану"],
+["Кәсіпорынның табысы мен шығындарының айырмасы","Пайда"]];
+const $=id=>document.getElementById(id);
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let stages,si,score,matched,total,sel,busy,soundOn=false,ac;
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))}
+function say(t,c){const m=$('ms');m.textContent=t;m.className='msg '+(c||'')}
+/* sound */
+function tone(f,d,t,v,w){if(!soundOn)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+(w||0);o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.1,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g);g.connect(ac.destination);o.start(s);o.stop(s+d)}catch(e){}}
+$('snd').onclick=()=>{soundOn=!soundOn;$('sndi').innerHTML=soundOn?'<path d="M11 5L6 9H3v6h3l5 4zM15.500 8.500a5 5 0 0 1 0 7M18.500 5.500a9 9 0 0 1 0 13"/>':'<path d="M11 5L6 9H3v6h3l5 4zM22 9l-6 6M16 9l6 6"/>';tone(520,.1)};
+$('fs').onclick=()=>{const d=document,e=d.documentElement;try{if(!d.fullscreenElement&&!d.webkitFullscreenElement)(e.requestFullscreen||e.webkitRequestFullscreen).call(e);else(d.exitFullscreen||d.webkitExitFullscreen).call(d)}catch(x){}};
+
+function start(){
+  const o=sh([...DATA.keys()]);
+  stages=[o.slice(0,3),o.slice(3,6),o.slice(6,9),o.slice(9)];
+  si=0;score=0;matched=0;total=0;sel=null;busy=false;
+  $('sc').textContent=0;$('fl').style.width='0%';
+  render(false);show('game');
+}
+function render(anim){
+  const ids=stages[si],n=ids.length,bd=$('bd');
+  $('stg').textContent=si+1;matched=0;sel=null;
+  say('Сол жақтан ұғымды таңда');
+  bd.classList.toggle('one',n===1);
+  bd.style.setProperty('--n',n);
+  $('L').style.setProperty('--n',n);$('R').style.setProperty('--n',n);
+  const L=sh(ids);let R=sh(ids);
+  for(let t=0;n>1&&t<100&&R.some((v,i)=>v===L[i]);t++)R=sh(ids);
+  $('L').innerHTML='';$('R').innerHTML='';
+  L.forEach(i=>{const c=document.createElement('div');c.className='card q';c.dataset.i=i;
+    c.innerHTML='<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+ICONS[i]+'</svg></span><span>'+DATA[i][0]+'</span>';
+    c.onclick=()=>pickQ(c);$('L').appendChild(c)});
+  R.forEach(i=>{const c=document.createElement('div');c.className='card a';c.dataset.i=i;
+    c.innerHTML='<span>'+DATA[i][1]+'</span>';c.onclick=()=>pickA(c);$('R').appendChild(c)});
+  bd.classList.remove('out');
+  if(anim){bd.classList.remove('fresh');void bd.offsetWidth;bd.classList.add('fresh')}
+}
+function pickQ(c){
+  if(busy||c.classList.contains('ok'))return;
+  tone(440,.06,'square',.04);
+  if(sel)sel.classList.remove('sel');
+  sel=c;c.classList.add('sel');say('Енді оң жақтан жауабын таңда');
+}
+function pickA(c){
+  if(busy||c.classList.contains('ok'))return;
+  if(!sel){say('Алдымен сол жақтағы ұғымды таңда');return}
+  const q=sel;sel=null;q.classList.remove('sel');
+  if(q.dataset.i===c.dataset.i){
+    q.classList.add('ok');c.classList.add('ok');
+    score+=10;total++;matched++;
+    $('sc').textContent=score;$('fl').style.width=total*10+'%';
+    say('Дұрыс! Жарайсың!','ok');
+    tone(523,.14);tone(659,.14,'sine',.1,.1);tone(784,.22,'sine',.1,.2);
+    const r=c.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,36);
+    if(matched===stages[si].length){busy=true;setTimeout(next,1100)}
+  }else{
+    busy=true;q.classList.add('no');c.classList.add('no');
+    say('Қайта байқап көр!','no');tone(170,.28,'sawtooth',.07);
+    setTimeout(()=>{q.classList.remove('no');c.classList.remove('no');busy=false;say('Сол жақтан ұғымды таңда')},520);
+  }
+}
+function next(){
+  if(si>=3){finish();return}
+  $('bd').classList.add('out');
+  setTimeout(()=>{si++;render(true);busy=false},450);
+}
+function finish(){
+  $('ws').textContent=score;$('wc').textContent=total+' / 10';
+  $('wm').classList.add('on');
+  [523,659,784,1047,1319].forEach((f,i)=>tone(f,.3,'triangle',.1,i*.13));
+  burst(innerWidth/2,innerHeight/3,150);
+  setTimeout(()=>burst(innerWidth*.2,innerHeight*.45,70),350);
+  setTimeout(()=>burst(innerWidth*.8,innerHeight*.45,70),650);
+}
+$('go').onclick=start;
+$('again').onclick=()=>{$('wm').classList.remove('on');start()};
+
+/* confetti */
+const cv=$('cf'),cx=cv.getContext('2d');let P=[],run=false;
+function rs(){cv.width=innerWidth;cv.height=innerHeight}rs();addEventListener('resize',rs);
+function burst(x,y,n){
+  const col=['#f5c451','#10b981','#22d3ee','#ffffff','#a78bfa'];
+  for(let i=0;i<n;i++){const a=Math.random()*6.283,s=3+Math.random()*7;
+    P.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-4,w:5+Math.random()*6,h:3+Math.random()*5,r:Math.random()*6,vr:Math.random()*.4-.2,c:col[Math.random()*col.length|0],l:1})}
+  if(!run){run=true;requestAnimationFrame(tick)}
+}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  P=P.filter(p=>p.l>0&&p.y<cv.height+20);
+  P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.22;p.vx*=.99;p.r+=p.vr;p.l-=.009;
+    cx.save();cx.globalAlpha=Math.max(p.l,0);cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()});
+  if(P.length)requestAnimationFrame(tick);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}
+}
+</script>
+</body>
+</html>
